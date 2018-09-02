@@ -35,6 +35,10 @@ class MqttManager:
         self.createAWSClient()
 
     def createLogger(self):
+        """
+        docstring here
+            :param self: 
+        """
         # Configure logging
         self._logger = logging.getLogger("AWSIoTPythonSDK.core")
         self._logger.setLevel(logging.DEBUG)
@@ -45,7 +49,10 @@ class MqttManager:
         self._logger.addHandler(streamHandler)
 
     def createAWSClient(self):
-
+        """
+        docstring here
+            :param self: 
+        """
         # configure AWS client with credentials and connection info
         with open(mqtt_constant.ENDPT_FILE_PATH, 'r') as idFile:
             iotID = idFile.read().replace('\n', '')
@@ -78,6 +85,12 @@ class MqttManager:
             self.awsDeviceList.append(iotObject.awsObjectProfile)
 
     def mqttPub(self, package, pubTopic):
+        """
+        docstring here
+            :param self: 
+            :param package: 
+            :param pubTopic: 
+        """
         message = {}
 
         if "Alexa.Debug" == package["namespace"]:

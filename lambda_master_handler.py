@@ -23,6 +23,10 @@ import mqtt_constant
 class MasterHandler:
 
     def __init__(self):
+        """
+        docstring here
+            :param self: 
+        """
         self._logger = logging.getLogger()
         self._logger.setLevel(logging.DEBUG)
         self._mqttManager = lambda_mqtt_manager.MqttManager()
@@ -33,6 +37,12 @@ class MasterHandler:
 
     @staticmethod
     def subCallBack(client, userdata, message):
+        """
+        docstring here
+            :param client: 
+            :param userdata: 
+            :param message: 
+        """
         print("Expected topic: ")
         print(MasterHandler._expectedTopic)
         print("Received a new message: ")
@@ -48,7 +58,11 @@ class MasterHandler:
             print("Wrong topic received\n")
 
     def handleDiscoveryV3(self, request):
-
+        """
+        docstring here
+            :param self: 
+            :param request: 
+        """
         response = {
             "event": {
                 "header": {
@@ -65,6 +79,12 @@ class MasterHandler:
         return response
 
     def handleNonDiscoveryV3(self, request, context):
+        """
+        docstring here
+            :param self: 
+            :param request: 
+            :param context: 
+        """
         request_namespace = utils.getNameSpace(request)
         request_name = utils.getCommandName(request)
 
@@ -100,6 +120,13 @@ class MasterHandler:
         return response
 
     def handleErrorResponse(self, request, errorType, errorMessage):
+        """
+        docstring here
+            :param self: 
+            :param request: 
+            :param errorType: 
+            :param errorMessage: 
+        """
         response = {
             "event": {
                 "header": {
@@ -126,6 +153,11 @@ class MasterHandler:
         return response
 
     def getApplicanceByMessage(self, message):
+        """
+        docstring here
+            :param self: 
+            :param message: 
+        """
         for appliance in self._mqttManager.iotObjList:
             if appliance.awsObjectProfile["endpointId"] == utils.getEndpointID(message):
                 return appliance

@@ -63,6 +63,11 @@ echoResponsePrototype = {
 class Translator:
     @staticmethod
     def translateToEcho(iotMessage, echoMessage):
+        """
+        docstring here
+            :param iotMessage: 
+            :param echoMessage: 
+        """
         response = copy.deepcopy(echoResponsePrototype)
 
         """handle the propeprties part of the response"""
@@ -116,6 +121,10 @@ class Translator:
 
     @staticmethod
     def translateToIoT(echoMessage):
+        """
+        docstring here
+            :param echoMessage: 
+        """
         # extract the name and namespace part of the request and fwd it to the iot device
         response = iotMessagePrototype
         response["namespace"] = utils.getNameSpace(echoMessage)

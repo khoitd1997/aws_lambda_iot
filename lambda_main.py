@@ -39,8 +39,13 @@ logger.setLevel(logging.INFO)
 
 
 def lambda_handler(req, context):
-    try:
+    """
+    docstring here
+        :param req: 
+        :param context: 
+    """
 
+    try:
         logger.info("Directive:")
         logger.info(json.dumps(req, indent=4, sort_keys=True))
         version = utils.get_directive_version(req)

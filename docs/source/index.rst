@@ -19,37 +19,42 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+Introduction
+==================
+This is the Sphinx documentation for the IoT lambda backend modules, for overview and other info, visit the github page of the project
+
+
 iot_object
 ==================
-.. automodule:: iot_object.py
+.. automodule:: iot_object
    :members:
 
 lambda_main
 ==================
-.. automodule:: lambda_main.py
+.. automodule:: lambda_main
    :members:
 
 lambda_master_handler
 ==================
-.. automodule:: lambda_master_handler.py
+.. automodule:: lambda_master_handler
    :members:
 
 lambda_mqtt_manager
 ==================
-.. automodule:: lambda_mqtt_manager.py
+.. automodule:: lambda_mqtt_manager
    :members:
 
 mqtt_constant
 ==================
-.. automodule:: mqtt_constant.py
+.. automodule:: mqtt_constant
    :members:
 
 translator
 ==================
-.. automodule:: translator.py
+.. automodule:: translator
    :members:
 
 utils
 ==================
-.. automodule:: utils.py
+.. automodule:: utils
    :members:
