@@ -18,12 +18,13 @@ The python source files are in the main dir of the project, the files in the fol
 
 - certs/: carry public, private keys, access point ID, certificate, certificate of authority, basically sensitive stuffs used for authentication purpose
 - docs/: contain Sphinx documentation for python modules
+- src/: contain the source files of the handler
+- lambda_main.py: this is the main lambda handler that AWS uses as entry point
 - The rest of the folders: dependencies for either json schemas or for AWS python SDK
 
 ### Python source files structure
 
 - iot_object.py: defines a basic class that represents every IoT devices and also store the aws IoT profiles of every profile that can be discovered by Alexa
-- lambda_main.py: this is the entry point of the lambda handler, from here, control is eventually passed to the Master Handler class
 - lambda_master_handler.py: contain the MasterHandler class, which is responsible for coordinating between different modules such as the MqttManager and the Translator
 - lambda_mqtt_manager.py: contain the MqttManager class, which is responsible for establishing and sub/pub with the AWS MQTT server, it also contains the callback function to be called every time a message arrived
 - mqtt_constant.py: files used for storing settings of the mqtt connection as well as information necessary to make an mqtt connection
