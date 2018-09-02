@@ -2,6 +2,10 @@
 
 Code for lambda function as backend for iot devices, written in **python 3**
 
+## Sphinx docs
+
+[Lambda Handler Docs](https://cdn.rawgit.com/khoitd1997/aws_lambda_iot/c5035dfa/docs/docs_build/html/index.html)
+
 ## How the system works
 
 The job of the lambda handler is to take request from Alexa, extract the necessary information and then pass it onto the correct IoT devices and vice versa, thus, it carries a database of devices that is implemented, their capabilities as well as their endpoint ID
