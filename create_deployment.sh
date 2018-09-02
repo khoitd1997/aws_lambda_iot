@@ -4,6 +4,6 @@
 package_name="lambda.zip"
 
 #------------------------------------------------
-
-rm -f ${lambda.zip}
-zip ${lambda.zip} -r .
+shopt -s extglob
+rm -f ${package_name}
+zip ${package_name} -r !(docs)

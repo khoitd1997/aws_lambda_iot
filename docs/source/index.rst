@@ -6,11 +6,15 @@
 Welcome to aws IoT lambda Backend's documentation!
 ==================================================
 
+Introduction
+==================
+This is the Sphinx documentation for the IoT lambda backend modules, for overview and other info, visit the github page of the project
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
-
+   modules.rst
 
 Indices and tables
 ==================
@@ -20,45 +24,6 @@ Indices and tables
 * :ref:`search`
 
 
-Introduction
-==================
-This is the Sphinx documentation for the IoT lambda backend modules, for overview and other info, visit the github page of the project
-
-Readme File
+README
 ===========
 .. mdinclude:: ../../README.md
-
-iot_object
-==================
-.. automodule:: iot_object
-   :members:
-
-lambda_main
-==================
-.. automodule:: lambda_main
-   :members:
-
-lambda_master_handler
-==================
-.. automodule:: lambda_master_handler
-   :members:
-
-lambda_mqtt_manager
-==================
-.. automodule:: lambda_mqtt_manager
-   :members:
-
-mqtt_constant
-==================
-.. automodule:: mqtt_constant
-   :members:
-
-translator
-==================
-.. automodule:: translator
-   :members:
-
-utils
-==================
-.. automodule:: utils
-   :members:

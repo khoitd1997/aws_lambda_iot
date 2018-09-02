@@ -1,6 +1,6 @@
 """
-.. module:: project_documentation
-    :synopsis: define a class representation of an IoT target(like pc controller) of the lambda handler
+.. module:: iot_object
+    :synopsis: Define a class that represents an IoT device that is supported by this lambda handler
 
 .. moduleauthor:: Khoi Trinh
 """

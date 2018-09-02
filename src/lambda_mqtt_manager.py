@@ -1,15 +1,15 @@
 """
 .. module:: lambda_mqtt_manager
-    :synopsis: define mqtt manager responsible for all communications with amazon aws server
+    :synopsis: define mqtt manager responsible for all communications with amazon aws mqtt server
 
 .. moduleauthor:: Khoi Trinh
 """
 
-
-"""
-This is the mqtt manager, used for quick pub/sub opepration
-"""
-
+import sys
+import os
+# Imports for v3 validation
+sys.path.append(os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '../')))
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 from AWSIoTPythonSDK.MQTTLib import DROP_OLDEST
 import mqtt_constant
@@ -29,15 +29,23 @@ import copy
 
 class MqttManager:
     def __init__(self):
+        """
+        Constructor for Mqtt Manager, create logger, connect to AWS mqtt client and grab the list of IoT devices that are available
+            :param self: 
+        """
         self.awsDeviceList = []
+        """This of aws profiles of the supported IoT devices, used during discovery request to advertise available devices"""
+
         self.iotObjList = iot_object.IOT_OBJ_LIST
+        """List of IoT mcu that this backend can talk to to fulfill Alexa request, it will also advertise this list to Alexa using Discovery Directives"""
+
         self.createLogger()
         self.createAWSClient()
 
     def createLogger(self):
         """
-        docstring here
-            :param self: 
+        Create a logger to log mqtt messages
+            :param self: instance of MqttManager
         """
         # Configure logging
         self._logger = logging.getLogger("AWSIoTPythonSDK.core")
@@ -50,8 +58,8 @@ class MqttManager:
 
     def createAWSClient(self):
         """
-        docstring here
-            :param self: 
+        Connect to AWS mqtt server using credentials included with the lambda deployment package, most settings are stored in the mqtt_constant module
+            :param self: instance of MqttManager
         """
         # configure AWS client with credentials and connection info
         with open(mqtt_constant.ENDPT_FILE_PATH, 'r') as idFile:
@@ -86,13 +94,14 @@ class MqttManager:
 
     def mqttPub(self, package, pubTopic):
         """
-        docstring here
-            :param self: 
-            :param package: 
-            :param pubTopic: 
+        Publish the given package to the supplied mqtt topic
+            :param self: instance of MqttManager
+            :param package: json dict to be published
+            :param pubTopic: topic to publish to
         """
         message = {}
 
+        # check if we are in debug mode, if not, proceed normally
         if "Alexa.Debug" == package["namespace"]:
             message["properties"] = []
             message["properties"].append(package)

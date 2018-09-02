@@ -25,11 +25,15 @@ import logging
 import time
 import json
 import uuid
+import sys
+sys.path.append('src/')
+sys.path.append('validator/')
+
 import utils
 import lambda_master_handler
 
-
-# Imports for v3 validation
+import sys
+import os
 from validation import validate_message
 
 from AWSIoTPythonSDK.exception.AWSIoTExceptions import disconnectTimeoutException, connectTimeoutException
@@ -40,9 +44,10 @@ logger.setLevel(logging.INFO)
 
 def lambda_handler(req, context):
     """
-    docstring here
-        :param req: 
-        :param context: 
+    This is where the program begins and where the program will end, its return value will be forwarded to Alexa 
+        :param req: the message from Alexa
+        :param context: execution context of the message, not used
+        :return: json dict that if valid, will be turned into Alexa speech response to user 
     """
 
     try:
@@ -58,14 +63,19 @@ def lambda_handler(req, context):
                 logger.warning("Connection timeout")
 
             logger.info("Received v3 directive!")
+
             if req["directive"]["header"]["name"] == "Discover":
+                # discovery is used to help Alexa knows what devices exist as well as what can be done with them
                 response = masterHandler.handleDiscoveryV3(req)
             else:
                 response = masterHandler.handleNonDiscoveryV3(req, context)
             # logger.info("Resp:")
             # logger.info(json.dumps(response, indent=4, sort_keys=True))
+
+            # check the response against amazon json schema
             validate_message(req, response)
 
+            # disconnect from mqtt server
             try:
                 while False == masterHandler._mqttManager._myAWSIoTMQTTClient.disconnect():
                     pass

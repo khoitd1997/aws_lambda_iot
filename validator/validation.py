@@ -33,11 +33,15 @@ from jsonschema import validate
 
 
 def validate_message(request, response):
-
+    """
+    Validate the responses of lambda handler against aws schema
+        :param request: the request recevied by the lambda handler
+        :param response: response that the handler intends to return to Alexa
+    """
     # update below with path to your validation schema
     # this path works if you copy the latest validation schema into the same directory as this file
     # validation schema: https://github.com/alexa/alexa-smarthome/wiki/Validation-Schema
-    rel_path_to_validation_schema = "validation_schemas/alexa_smart_home_message_schema.json"
+    rel_path_to_validation_schema = "../validation_schemas/alexa_smart_home_message_schema.json"
     path_to_script = os.path.dirname(__file__)
 
     full_path = os.path.join(path_to_script, rel_path_to_validation_schema)

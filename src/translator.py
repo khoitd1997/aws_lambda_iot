@@ -23,6 +23,7 @@ iotReplyPrototype = {
     "name": "brightness",
     "value": 50
 }
+"""A skeleton dictionary that represents typical reply by IoT devices, the translator copy this, extract the data from the IoT reply into the copy, and then attach into the final response to Alexa"""
 
 
 # a skeleton properties section of echo response
@@ -33,6 +34,7 @@ echoPropertiesPrototype = {
     "timeOfSample": "2017-09-27T18:30:30.45Z",
     "uncertaintyInMilliseconds": mqtt_constant.UNCERTAINTY_MS
 }
+"""A skeleton dictionary represents a typical member of the properties list in the Discovery response to Alexa"""
 
 # a skeleton echo message
 echoResponsePrototype = {
@@ -58,15 +60,19 @@ echoResponsePrototype = {
         "payload": {}
     }
 }
+"""A skeleton dictionary representing a response to Alexa, translator will fill this out with appropriate details and then return as the lambda final responses(if it passes the json validate test)"""
 
 
 class Translator:
+    """Responsible for translating from Alexa commands to commands for IoT and replies of IoT devices to Alexa responses to users"""
+
     @staticmethod
     def translateToEcho(iotMessage, echoMessage):
         """
         docstring here
-            :param iotMessage: 
-            :param echoMessage: 
+            :param iotMessage: the message received from and IoT device 
+            :param echoMessage: the echo message originally received by the lambda handler
+            :return: the final dict to be returned as return result of the lambda handler
         """
         response = copy.deepcopy(echoResponsePrototype)
 
@@ -123,7 +129,8 @@ class Translator:
     def translateToIoT(echoMessage):
         """
         docstring here
-            :param echoMessage: 
+            :param echoMessage: message to be translated to IoT
+            :return: the translated dict to be sent to IoT
         """
         # extract the name and namespace part of the request and fwd it to the iot device
         response = iotMessagePrototype
