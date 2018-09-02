@@ -2,9 +2,17 @@
 
 Code for lambda function as backend for iot devices, written in **python 3**
 
+## The IoT devices code
+
+The code for the IoT devices like esp8266 can be found at [aws iot device code](https://github.com/khoitd1997/aws_iot_device)
+
 ## Sphinx docs
 
 [Lambda Handler Docs](https://cdn.rawgit.com/khoitd1997/aws_lambda_iot/c5035dfa/docs/docs_build/html/index.html)
+
+## How to deploy to aws lambda
+
+Use the create_deployment script to get a lambda.zip then upload it to your lambda function console, before that makes sure you have created a lambda function with Alexa Smart Home as a trigger
 
 ## How the system works
 
@@ -15,6 +23,68 @@ When the user utters a smart home command, the command is sent to the lambda han
 Once the message has been forwarded, the handler waits until it timeouts(8 seconds) or it receives a reply from the expected topic (ie the topic that the target IoT device publishes to)
 
 Once it receives the message from the IoT(which will usually contain the name, namespace and result value of the command that was sent to it), the master handler sends the message to the Translator class, which will reformat and attach more information to the base message so that it fits Alexa Smarthome response guideline for the corresponding endpoint/command types, after that the message is validated using Amazon schema and then returned so that Alexa can tell users the result
+
+## How to add new IoT devices
+
+To add new devices that can be supported by Alexa, you need to initialize a new awsProfile, use that to create an IotObject for that object and then add it to the IOT_OBJ_LIST in the iot_object.py file, for example:
+
+```python
+# insidie iot_object.py
+
+# consult aws smart home documentation to see how to generate these things
+# https://developer.amazon.com/docs/smarthome/understand-the-smart-home-skill-api.html
+deviceAwsProfile = {
+    "endpointId": "endpoint-001",
+    "manufacturerName": "your name",
+    "friendlyName": "my computer",
+    "description": "Controller that controls and monitor the desktop PC",
+    "displayCategories": [
+        "SWITCH"
+    ],
+    "cookie": {},
+    "capabilities": [
+        {
+            "type": "AlexaInterface",
+            "interface": "Alexa",
+            "version": "3"
+        },
+        {
+            "type": "AlexaInterface",
+            "interface": "Alexa.PowerController",
+            "version": "3",
+            "properties": {
+                "supported": [
+                    {
+                        "name": "powerState"
+                    }
+                ],
+                "proactivelyReported": True,
+                "retrievable": True
+            }
+        },
+        {
+            "type": "AlexaInterface",
+            "interface": "Alexa.EndpointHealth",
+            "version": "3",
+            "properties": {
+                "supported": [
+                    {
+                        "name": "connectivity"
+                    }
+                ],
+                "proactivelyReported": True,
+                "retrievable": True
+            }
+        }
+    ]
+}
+
+# create IoT object representation of the device
+# note that pub and sub topic refers to topic that the device pub/sub not the lambda handler's pub/sub
+deviceName = IotObject("mqttPubChannel", "mqttSubChannel", deviceAwsProfile)
+
+IOT_OBJ_LIST = [device1, device2, deviceName] # add the device to the list
+```
 
 ## Project strucutre
 
