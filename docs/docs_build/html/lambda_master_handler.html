@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lambda_master_handler module &mdash; aws IoT lambda Backend 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> aws IoT lambda Backend
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">lambda_master_handler module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">aws IoT lambda Backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>lambda_master_handler module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lambda_master_handler.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-lambda_master_handler">
+<span id="lambda-master-handler-module"></span><h1>lambda_master_handler module<a class="headerlink" href="#module-lambda_master_handler" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-lambda_master_handler"></span><dl class="class">
+<dt id="lambda_master_handler.MasterHandler">
+<em class="property">class </em><code class="descclassname">lambda_master_handler.</code><code class="descname">MasterHandler</code><a class="reference internal" href="_modules/lambda_master_handler.html#MasterHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_master_handler.MasterHandler" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>docstring create a master handler project, create a logger as well as an mqtt manager for mqtt related task</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">the instance of MasterHandler class</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="lambda_master_handler.MasterHandler._expectedTopic">
+<code class="descname">_expectedTopic</code><em class="property"> = ''</em><a class="headerlink" href="#lambda_master_handler.MasterHandler._expectedTopic" title="Permalink to this definition">¶</a></dt>
+<dd><p>the topic that the master handler is expecting to receive from, the _replyReceived flag is only set if the expected topic mateched the received topic</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lambda_master_handler.MasterHandler._logger">
+<code class="descname">_logger</code><em class="property"> = None</em><a class="headerlink" href="#lambda_master_handler.MasterHandler._logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance of logger used for logging purpose</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lambda_master_handler.MasterHandler._mqttManager">
+<code class="descname">_mqttManager</code><em class="property"> = None</em><a class="headerlink" href="#lambda_master_handler.MasterHandler._mqttManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance of an mqtt manager, used by the master handler for communicating with aws mqtt</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lambda_master_handler.MasterHandler._replyMessage">
+<code class="descname">_replyMessage</code><em class="property"> = ''</em><a class="headerlink" href="#lambda_master_handler.MasterHandler._replyMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>message received by mqtt callback function</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lambda_master_handler.MasterHandler._replyReceived">
+<code class="descname">_replyReceived</code><em class="property"> = False</em><a class="headerlink" href="#lambda_master_handler.MasterHandler._replyReceived" title="Permalink to this definition">¶</a></dt>
+<dd><p>flags used for signalling if the correct reply has been received by mqtt callback function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lambda_master_handler.MasterHandler.getApplicanceByMessage">
+<code class="descname">getApplicanceByMessage</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_master_handler.html#MasterHandler.getApplicanceByMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_master_handler.MasterHandler.getApplicanceByMessage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Parse the message sent by Alexa for the target endpoint ID and then look for that endpoint in the database list in the mqtt manager</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">instance of master handler</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param message:</th><td class="field-body">the message received by lambda handler from Alexa</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lambda_master_handler.MasterHandler.handleDiscoveryV3">
+<code class="descname">handleDiscoveryV3</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_master_handler.html#MasterHandler.handleDiscoveryV3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_master_handler.MasterHandler.handleDiscoveryV3" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Used to handle discovery request, which lets Alexa know the list of devices that is available and what they can do</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">the instance of master hander</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param request:</th><td class="field-body">the request received by the lambda handler</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lambda_master_handler.MasterHandler.handleErrorResponse">
+<code class="descname">handleErrorResponse</code><span class="sig-paren">(</span><em>request</em>, <em>errorType</em>, <em>errorMessage</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_master_handler.html#MasterHandler.handleErrorResponse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_master_handler.MasterHandler.handleErrorResponse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Used for creating a response to Amazon that indicates something wrong has happened</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">instance of master handler</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param request:</th><td class="field-body">the request received by lambda handler</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param errorType:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">type of error encountered, limited number of types supported</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param errorMessage:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">error message to be included in the payload</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lambda_master_handler.MasterHandler.handleNonDiscoveryV3">
+<code class="descname">handleNonDiscoveryV3</code><span class="sig-paren">(</span><em>request</em>, <em>context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_master_handler.html#MasterHandler.handleNonDiscoveryV3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_master_handler.MasterHandler.handleNonDiscoveryV3" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Most requests are handled here, the handler will parse the necessary detail, forward it to the correct devices(using endpoint-ID to identify who to send to), wait for repy and then either timeout or tranlsate the reply of the IoT device into something that Alexa can understand and then hand it to the original lambda_handler in lambda_main</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">instance of master handler</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param request:</th><td class="field-body">the request received by lambda handler</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param context:</th><td class="field-body">execution contex, not used</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="lambda_master_handler.MasterHandler.subCallBack">
+<em class="property">static </em><code class="descname">subCallBack</code><span class="sig-paren">(</span><em>client</em>, <em>userdata</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_master_handler.html#MasterHandler.subCallBack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_master_handler.MasterHandler.subCallBack" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>The mqtt subscribe callback function, used for receiving messages from the IoT devices</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param client:</th><td class="field-body">derpecated param</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param userdata:</th><td class="field-body">deperated param</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param message:</th><td class="field-body">an object that contains the main payload as well as the topic that payload comes from</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Khoi Trinh.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

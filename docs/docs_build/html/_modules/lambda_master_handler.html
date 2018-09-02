@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lambda_master_handler &mdash; aws IoT lambda Backend 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> aws IoT lambda Backend
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aws IoT lambda Backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>lambda_master_handler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lambda_master_handler</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: lambda_master_handler</span>
+<span class="sd">    :synopsis: define the master handler responsible for gluing different modules together to handle an aws request</span>
+
+<span class="sd">.. moduleauthor:: Khoi Trinh</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+
+<span class="kn">import</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">translator</span>
+<span class="kn">import</span> <span class="nn">lambda_mqtt_manager</span>
+<span class="kn">import</span> <span class="nn">mqtt_constant</span>
+
+
+<div class="viewcode-block" id="MasterHandler"><a class="viewcode-back" href="../lambda_master_handler.html#lambda_master_handler.MasterHandler">[docs]</a><span class="k">class</span> <span class="nc">MasterHandler</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        docstring create a master handler project, create a logger as well as an mqtt manager for mqtt related task</span>
+<span class="sd">            :param self: the instance of MasterHandler class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;Instance of logger used for logging purpose&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mqttManager</span> <span class="o">=</span> <span class="n">lambda_mqtt_manager</span><span class="o">.</span><span class="n">MqttManager</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;Instance of an mqtt manager, used by the master handler for communicating with aws mqtt&quot;&quot;&quot;</span>
+
+    <span class="n">_replyReceived</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;flags used for signalling if the correct reply has been received by mqtt callback function&quot;&quot;&quot;</span>
+
+    <span class="n">_replyMessage</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;message received by mqtt callback function&quot;&quot;&quot;</span>
+
+    <span class="n">_expectedTopic</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;the topic that the master handler is expecting to receive from, the _replyReceived flag is only set if the expected topic mateched the received topic&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MasterHandler.subCallBack"><a class="viewcode-back" href="../lambda_master_handler.html#lambda_master_handler.MasterHandler.subCallBack">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">subCallBack</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The mqtt subscribe callback function, used for receiving messages from the IoT devices</span>
+<span class="sd">            :param client: derpecated param</span>
+<span class="sd">            :param userdata: deperated param</span>
+<span class="sd">            :param message: an object that contains the main payload as well as the topic that payload comes from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expected topic: &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">MasterHandler</span><span class="o">.</span><span class="n">_expectedTopic</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Received a new message: &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;from topic: &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">topic</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># only signal the MasterHandler if the message comes from correct topic</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">topic</span><span class="p">)</span> <span class="o">==</span> <span class="n">MasterHandler</span><span class="o">.</span><span class="n">_expectedTopic</span><span class="p">:</span>
+            <span class="n">MasterHandler</span><span class="o">.</span><span class="n">_replyReceived</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">MasterHandler</span><span class="o">.</span><span class="n">_replyMessage</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">payload</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrong topic received</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MasterHandler.handleDiscoveryV3"><a class="viewcode-back" href="../lambda_master_handler.html#lambda_master_handler.MasterHandler.handleDiscoveryV3">[docs]</a>    <span class="k">def</span> <span class="nf">handleDiscoveryV3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to handle discovery request, which lets Alexa know the list of devices that is available and what they can do</span>
+<span class="sd">            :param self: the instance of master hander</span>
+<span class="sd">            :param request: the request received by the lambda handler</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="s2">&quot;Alexa.Discovery&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Discover.Response&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;payloadVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;messageId&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">getUuid</span><span class="p">()</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;endpoints&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mqttManager</span><span class="o">.</span><span class="n">awsDeviceList</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="MasterHandler.handleNonDiscoveryV3"><a class="viewcode-back" href="../lambda_master_handler.html#lambda_master_handler.MasterHandler.handleNonDiscoveryV3">[docs]</a>    <span class="k">def</span> <span class="nf">handleNonDiscoveryV3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Most requests are handled here, the handler will parse the necessary detail, forward it to the correct devices(using endpoint-ID to identify who to send to), wait for repy and then either timeout or tranlsate the reply of the IoT device into something that Alexa can understand and then hand it to the original lambda_handler in lambda_main</span>
+<span class="sd">            :param self: instance of master handler</span>
+<span class="sd">            :param request: the request received by lambda handler</span>
+<span class="sd">            :param context: execution contex, not used</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">request_namespace</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">getNameSpace</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">request_name</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">getCommandName</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="c1"># special case, for authorization accept grant, reply with authorizing response</span>
+        <span class="k">if</span> <span class="n">request_namespace</span> <span class="o">==</span> <span class="s2">&quot;Alexa.Authorization&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">request_name</span> <span class="o">==</span> <span class="s2">&quot;AcceptGrant&quot;</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="s2">&quot;Alexa.Authorization&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;AcceptGrant.Response&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;payloadVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;messageId&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">getUuid</span><span class="p">()</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">{}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TODO: add error handling</span>
+            <span class="c1"># parse the message for necessary detail and then send it to IoT device</span>
+            <span class="n">appliance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getApplicanceByMessage</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="n">iotMessage</span> <span class="o">=</span> <span class="n">translator</span><span class="o">.</span><span class="n">Translator</span><span class="o">.</span><span class="n">translateToIoT</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="n">MasterHandler</span><span class="o">.</span><span class="n">_replyReceived</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">MasterHandler</span><span class="o">.</span><span class="n">_replyMessage</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">MasterHandler</span><span class="o">.</span><span class="n">_expectedTopic</span> <span class="o">=</span> <span class="n">appliance</span><span class="o">.</span><span class="n">pubTopic</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mqttManager</span><span class="o">.</span><span class="n">mqttPub</span><span class="p">(</span><span class="n">iotMessage</span><span class="p">,</span> <span class="n">appliance</span><span class="o">.</span><span class="n">subTopic</span><span class="p">)</span>
+
+            <span class="k">while</span> <span class="kc">False</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replyReceived</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="n">response</span> <span class="o">=</span> <span class="n">translator</span><span class="o">.</span><span class="n">Translator</span><span class="o">.</span><span class="n">translateToEcho</span><span class="p">(</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_replyMessage</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)),</span> <span class="n">request</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="MasterHandler.handleErrorResponse"><a class="viewcode-back" href="../lambda_master_handler.html#lambda_master_handler.MasterHandler.handleErrorResponse">[docs]</a>    <span class="k">def</span> <span class="nf">handleErrorResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">errorType</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used for creating a response to Amazon that indicates something wrong has happened</span>
+<span class="sd">            :param self: instance of master handler</span>
+<span class="sd">            :param request: the request received by lambda handler</span>
+<span class="sd">            :param errorType: type of error encountered, limited number of types supported</span>
+<span class="sd">            :param errorMessage: error message to be included in the payload</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;namespace&quot;</span><span class="p">:</span> <span class="s2">&quot;Alexa&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ErrorResponse&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;payloadVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;messageId&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">getUuid</span><span class="p">(),</span>
+                    <span class="s2">&quot;correlationToken&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">getCorrelationToken</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;endpoint&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;BearerToken&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="n">request</span><span class="p">[</span><span class="s2">&quot;directive&quot;</span><span class="p">][</span><span class="s2">&quot;endpoint&quot;</span><span class="p">][</span><span class="s2">&quot;scope&quot;</span><span class="p">][</span><span class="s2">&quot;token&quot;</span><span class="p">]</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;endpointId&quot;</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">getEndpointID</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="c1"># TODO: may need to customize payload based on error type</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">errorType</span><span class="p">,</span>
+                    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">errorMessage</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="MasterHandler.getApplicanceByMessage"><a class="viewcode-back" href="../lambda_master_handler.html#lambda_master_handler.MasterHandler.getApplicanceByMessage">[docs]</a>    <span class="k">def</span> <span class="nf">getApplicanceByMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the message sent by Alexa for the target endpoint ID and then look for that endpoint in the database list in the mqtt manager</span>
+<span class="sd">            :param self: instance of master handler</span>
+<span class="sd">            :param message: the message received by lambda handler from Alexa</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">appliance</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mqttManager</span><span class="o">.</span><span class="n">iotObjList</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">appliance</span><span class="o">.</span><span class="n">awsObjectProfile</span><span class="p">[</span><span class="s2">&quot;endpointId&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">utils</span><span class="o">.</span><span class="n">getEndpointID</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">appliance</span>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Khoi Trinh.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lambda_mqtt_manager module &mdash; aws IoT lambda Backend 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> aws IoT lambda Backend
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">lambda_mqtt_manager module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">aws IoT lambda Backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>lambda_mqtt_manager module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lambda_mqtt_manager.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-lambda_mqtt_manager">
+<span id="lambda-mqtt-manager-module"></span><h1>lambda_mqtt_manager module<a class="headerlink" href="#module-lambda_mqtt_manager" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-lambda_mqtt_manager"></span><dl class="class">
+<dt id="lambda_mqtt_manager.MqttManager">
+<em class="property">class </em><code class="descclassname">lambda_mqtt_manager.</code><code class="descname">MqttManager</code><a class="reference internal" href="_modules/lambda_mqtt_manager.html#MqttManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_mqtt_manager.MqttManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Constructor for Mqtt Manager, create logger, connect to AWS mqtt client and grab the list of IoT devices that are available</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="lambda_mqtt_manager.MqttManager.awsDeviceList">
+<code class="descname">awsDeviceList</code><em class="property"> = None</em><a class="headerlink" href="#lambda_mqtt_manager.MqttManager.awsDeviceList" title="Permalink to this definition">¶</a></dt>
+<dd><p>This of aws profiles of the supported IoT devices, used during discovery request to advertise available devices</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lambda_mqtt_manager.MqttManager.createAWSClient">
+<code class="descname">createAWSClient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_mqtt_manager.html#MqttManager.createAWSClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_mqtt_manager.MqttManager.createAWSClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Connect to AWS mqtt server using credentials included with the lambda deployment package, most settings are stored in the mqtt_constant module</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">instance of MqttManager</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="lambda_mqtt_manager.MqttManager.createLogger">
+<code class="descname">createLogger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_mqtt_manager.html#MqttManager.createLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_mqtt_manager.MqttManager.createLogger" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Create a logger to log mqtt messages</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">instance of MqttManager</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lambda_mqtt_manager.MqttManager.iotObjList">
+<code class="descname">iotObjList</code><em class="property"> = None</em><a class="headerlink" href="#lambda_mqtt_manager.MqttManager.iotObjList" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of IoT mcu that this backend can talk to to fulfill Alexa request, it will also advertise this list to Alexa using Discovery Directives</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lambda_mqtt_manager.MqttManager.mqttPub">
+<code class="descname">mqttPub</code><span class="sig-paren">(</span><em>package</em>, <em>pubTopic</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lambda_mqtt_manager.html#MqttManager.mqttPub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lambda_mqtt_manager.MqttManager.mqttPub" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Publish the given package to the supplied mqtt topic</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param self:</th><td class="field-body">instance of MqttManager</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param package:</th><td class="field-body">json dict to be published</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param pubTopic:</th><td class="field-body">topic to publish to</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Khoi Trinh.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

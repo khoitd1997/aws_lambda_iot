@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lambda_mqtt_manager &mdash; aws IoT lambda Backend 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> aws IoT lambda Backend
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aws IoT lambda Backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>lambda_mqtt_manager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lambda_mqtt_manager</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: lambda_mqtt_manager</span>
+<span class="sd">    :synopsis: define mqtt manager responsible for all communications with amazon aws mqtt server</span>
+
+<span class="sd">.. moduleauthor:: Khoi Trinh</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># Imports for v3 validation</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;../&#39;</span><span class="p">)))</span>
+<span class="kn">from</span> <span class="nn">AWSIoTPythonSDK.MQTTLib</span> <span class="k">import</span> <span class="n">AWSIoTMQTTClient</span>
+<span class="kn">from</span> <span class="nn">AWSIoTPythonSDK.MQTTLib</span> <span class="k">import</span> <span class="n">DROP_OLDEST</span>
+<span class="kn">import</span> <span class="nn">mqtt_constant</span>
+<span class="kn">import</span> <span class="nn">lambda_master_handler</span>
+<span class="kn">import</span> <span class="nn">iot_object</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="c1"># source: https://github.com/aws/aws-iot-device-sdk-python/blob/master/samples/basicPubSub/basicPubSub.py</span>
+
+<span class="c1"># TODO: implement a queue for message handling</span>
+
+<span class="c1"># source: https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python</span>
+
+
+<div class="viewcode-block" id="MqttManager"><a class="viewcode-back" href="../lambda_mqtt_manager.html#lambda_mqtt_manager.MqttManager">[docs]</a><span class="k">class</span> <span class="nc">MqttManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor for Mqtt Manager, create logger, connect to AWS mqtt client and grab the list of IoT devices that are available</span>
+<span class="sd">            :param self: </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">awsDeviceList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="sd">&quot;&quot;&quot;This of aws profiles of the supported IoT devices, used during discovery request to advertise available devices&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">iotObjList</span> <span class="o">=</span> <span class="n">iot_object</span><span class="o">.</span><span class="n">IOT_OBJ_LIST</span>
+        <span class="sd">&quot;&quot;&quot;List of IoT mcu that this backend can talk to to fulfill Alexa request, it will also advertise this list to Alexa using Discovery Directives&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">createLogger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createAWSClient</span><span class="p">()</span>
+
+<div class="viewcode-block" id="MqttManager.createLogger"><a class="viewcode-back" href="../lambda_mqtt_manager.html#lambda_mqtt_manager.MqttManager.createLogger">[docs]</a>    <span class="k">def</span> <span class="nf">createLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a logger to log mqtt messages</span>
+<span class="sd">            :param self: instance of MqttManager</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Configure logging</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AWSIoTPythonSDK.core&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">streamHandler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">streamHandler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">streamHandler</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MqttManager.createAWSClient"><a class="viewcode-back" href="../lambda_mqtt_manager.html#lambda_mqtt_manager.MqttManager.createAWSClient">[docs]</a>    <span class="k">def</span> <span class="nf">createAWSClient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Connect to AWS mqtt server using credentials included with the lambda deployment package, most settings are stored in the mqtt_constant module</span>
+<span class="sd">            :param self: instance of MqttManager</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># configure AWS client with credentials and connection info</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mqtt_constant</span><span class="o">.</span><span class="n">ENDPT_FILE_PATH</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">idFile</span><span class="p">:</span>
+            <span class="n">iotID</span> <span class="o">=</span> <span class="n">idFile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span> <span class="o">=</span> <span class="n">AWSIoTMQTTClient</span><span class="p">(</span><span class="n">mqtt_constant</span><span class="o">.</span><span class="n">CLIENT_ID</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureEndpoint</span><span class="p">(</span>
+            <span class="n">iotID</span> <span class="o">+</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">AWS_ENDPOINT</span><span class="p">,</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">MQTT_PORT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureCredentials</span><span class="p">(</span>
+            <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">AUTHORITY_CERT_PATH</span><span class="p">,</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">PRIVATE_KEY_PATH</span><span class="p">,</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">CERTIFICATE_PATH</span><span class="p">)</span>
+
+        <span class="c1"># AWSIoTMQTTClient connection configuration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureAutoReconnectBackoffTime</span><span class="p">(</span>
+            <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">INITIAL_BACKOFF_TIME</span><span class="p">,</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">MAX_BACKOFF_TIME</span><span class="p">,</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">STABLE_TIME</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureOfflinePublishQueueing</span><span class="p">(</span>
+            <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">OFFLINE_PUB_QUEUE</span><span class="p">,</span> <span class="n">DROP_OLDEST</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureDrainingFrequency</span><span class="p">(</span>
+            <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">DRAINING_FREQ</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureConnectDisconnectTimeout</span><span class="p">(</span>
+            <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">CONNECT_DISCONNECT_TIMEOUT</span><span class="p">)</span>  <span class="c1"># 10 sec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureMQTTOperationTimeout</span><span class="p">(</span>
+            <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">OPERATION_TIMEOUT</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="kc">False</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">mqtt_constant</span><span class="o">.</span><span class="n">KEEP_ALIVE_SECONDS</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># AWS subscription configuration</span>
+        <span class="k">for</span> <span class="n">iotObject</span> <span class="ow">in</span> <span class="n">iot_object</span><span class="o">.</span><span class="n">IOT_OBJ_LIST</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span>
+                <span class="n">iotObject</span><span class="o">.</span><span class="n">pubTopic</span><span class="p">,</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">SUB_QOS</span><span class="p">,</span> <span class="n">lambda_master_handler</span><span class="o">.</span><span class="n">MasterHandler</span><span class="o">.</span><span class="n">subCallBack</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">awsDeviceList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iotObject</span><span class="o">.</span><span class="n">awsObjectProfile</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MqttManager.mqttPub"><a class="viewcode-back" href="../lambda_mqtt_manager.html#lambda_mqtt_manager.MqttManager.mqttPub">[docs]</a>    <span class="k">def</span> <span class="nf">mqttPub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="n">pubTopic</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Publish the given package to the supplied mqtt topic</span>
+<span class="sd">            :param self: instance of MqttManager</span>
+<span class="sd">            :param package: json dict to be published</span>
+<span class="sd">            :param pubTopic: topic to publish to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># check if we are in debug mode, if not, proceed normally</span>
+        <span class="k">if</span> <span class="s2">&quot;Alexa.Debug&quot;</span> <span class="o">==</span> <span class="n">package</span><span class="p">[</span><span class="s2">&quot;namespace&quot;</span><span class="p">]:</span>
+            <span class="n">message</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">message</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">package</span>
+
+        <span class="n">messageJson</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span>
+            <span class="n">pubTopic</span><span class="p">,</span> <span class="n">messageJson</span><span class="p">,</span> <span class="n">mqtt_constant</span><span class="o">.</span><span class="n">PUB_QOS</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Khoi Trinh.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

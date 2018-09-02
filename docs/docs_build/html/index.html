@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to aws IoT lambda Backend’s documentation! &mdash; aws IoT lambda Backend 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> aws IoT lambda Backend
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to aws IoT lambda Backend’s documentation!</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#readme">README</a></li>
+<li><a class="reference internal" href="#aws-lambda-iot-backend">AWS Lambda IoT backend</a><ul>
+<li><a class="reference internal" href="#how-the-system-works">How the system works</a></li>
+<li><a class="reference internal" href="#project-strucutre">Project strucutre</a><ul>
+<li><a class="reference internal" href="#python-source-files-structure">Python source files structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#shell-script-documentation">Shell script documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">aws IoT lambda Backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to aws IoT lambda Backend’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-aws-iot-lambda-backend-s-documentation">
+<h1>Welcome to aws IoT lambda Backend’s documentation!<a class="headerlink" href="#welcome-to-aws-iot-lambda-backend-s-documentation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>This is the Sphinx documentation for the IoT lambda backend modules, for overview and other info, visit the github page of the project</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+<div class="section" id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="aws-lambda-iot-backend">
+<h1>AWS Lambda IoT backend<a class="headerlink" href="#aws-lambda-iot-backend" title="Permalink to this headline">¶</a></h1>
+<p>Code for lambda function as backend for iot devices, written in <strong>python 3</strong></p>
+<div class="section" id="how-the-system-works">
+<h2>How the system works<a class="headerlink" href="#how-the-system-works" title="Permalink to this headline">¶</a></h2>
+<p>The job of the lambda handler is to take request from Alexa, extract the necessary information and then pass it onto the correct IoT devices and vice versa, thus, it carries a database of devices that is implemented, their capabilities as well as their endpoint ID</p>
+<p>When the user utters a smart home command, the command is sent to the lambda hander in a python dictionary, the Master Handler class parses that and obtain the payload, the name and the namespace of the command, package it into a json string(using a class called the Translator), then look up the endpoint ID in the message to know which devices to forward the information to, if the device exists, the handler will know which mqtt server to publish to to send the request to the IoT devices. The master handler use a class called MqttManager to manage pub/sub activities</p>
+<p>Once the message has been forwarded, the handler waits until it timeouts(8 seconds) or it receives a reply from the expected topic (ie the topic that the target IoT device publishes to)</p>
+<p>Once it receives the message from the IoT(which will usually contain the name, namespace and result value of the command that was sent to it), the master handler sends the message to the Translator class, which will reformat and attach more information to the base message so that it fits Alexa Smarthome response guideline for the corresponding endpoint/command types, after that the message is validated using Amazon schema and then returned so that Alexa can tell users the result</p>
+</div>
+<div class="section" id="project-strucutre">
+<h2>Project strucutre<a class="headerlink" href="#project-strucutre" title="Permalink to this headline">¶</a></h2>
+<p>The python source files are in the main dir of the project, the files in the folders are usually dependencies</p>
+<ul class="simple">
+<li>certs/: carry public, private keys, access point ID, certificate, certificate of authority, basically sensitive stuffs used for authentication purpose</li>
+<li>docs/: contain Sphinx documentation for python modules</li>
+<li>src/: contain the source files of the handler</li>
+<li>lambda_main.py: this is the main lambda handler that AWS uses as entry point</li>
+<li>The rest of the folders: dependencies for either json schemas or for AWS python SDK</li>
+</ul>
+<div class="section" id="python-source-files-structure">
+<h3>Python source files structure<a class="headerlink" href="#python-source-files-structure" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>iot_object.py: defines a basic class that represents every IoT devices and also store the aws IoT profiles of every profile that can be discovered by Alexa</li>
+<li>lambda_master_handler.py: contain the MasterHandler class, which is responsible for coordinating between different modules such as the MqttManager and the Translator</li>
+<li>lambda_mqtt_manager.py: contain the MqttManager class, which is responsible for establishing and sub/pub with the AWS MQTT server, it also contains the callback function to be called every time a message arrived</li>
+<li>mqtt_constant.py: files used for storing settings of the mqtt connection as well as information necessary to make an mqtt connection</li>
+<li>translator.py: file contains the Translator class which is responsible for translating from Alexa message to IoT and vice versa</li>
+<li>utils.py: general utils files mainly used for parsing the json dictionary</li>
+<li>validation.py: the file was given by Amazon to validate the final response json to make sure it fits Alexa response schema</li>
+</ul>
+</div>
+</div>
+<div class="section" id="shell-script-documentation">
+<h2>Shell script documentation<a class="headerlink" href="#shell-script-documentation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>create_deployment.sh: used for creating a zip file that can be uploaded to aws lambda to serve as the lambda function</li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./create_deployment.sh <span class="c1"># create a file called lambda.zip</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>install_dependencies.sh: install the necessary dependencies to the lambda handler including things like AWS python IoT SDK and the json parser tools</li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./install_dependencies.sh <span class="c1"># install dependencies to the current dir</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Khoi Trinh.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

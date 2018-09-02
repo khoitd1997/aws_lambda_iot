@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mqtt_constant module &mdash; aws IoT lambda Backend 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> aws IoT lambda Backend
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">mqtt_constant module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">aws IoT lambda Backend</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>mqtt_constant module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/mqtt_constant.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mqtt_constant">
+<span id="mqtt-constant-module"></span><h1>mqtt_constant module<a class="headerlink" href="#module-mqtt_constant" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-mqtt_constant"></span><dl class="data">
+<dt id="mqtt_constant.AUTHORITY_CERT_PATH">
+<code class="descclassname">mqtt_constant.</code><code class="descname">AUTHORITY_CERT_PATH</code><em class="property"> = 'certs/VeriSign-Class_3-Public-Primary-Certification-Authority-G5.pem'</em><a class="headerlink" href="#mqtt_constant.AUTHORITY_CERT_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative path to certifcate of authority</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.AWS_ENDPOINT">
+<code class="descclassname">mqtt_constant.</code><code class="descname">AWS_ENDPOINT</code><em class="property"> = '.iot.us-east-1.amazonaws.com'</em><a class="headerlink" href="#mqtt_constant.AWS_ENDPOINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The middle part of the endpoint that indicates regions of aws service</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.CERTIFICATE_PATH">
+<code class="descclassname">mqtt_constant.</code><code class="descname">CERTIFICATE_PATH</code><em class="property"> = 'certs/certificate.pem.crt'</em><a class="headerlink" href="#mqtt_constant.CERTIFICATE_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative path to device certificate, downloaded from aws IoT</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.CLIENT_ID">
+<code class="descclassname">mqtt_constant.</code><code class="descname">CLIENT_ID</code><em class="property"> = 'lambda_service'</em><a class="headerlink" href="#mqtt_constant.CLIENT_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of this lambda handler function</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.CONNECT_DISCONNECT_TIMEOUT">
+<code class="descclassname">mqtt_constant.</code><code class="descname">CONNECT_DISCONNECT_TIMEOUT</code><em class="property"> = 5</em><a class="headerlink" href="#mqtt_constant.CONNECT_DISCONNECT_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many seconds to wait before concluding that the connect/disconnect operation has timed out</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.DRAINING_FREQ">
+<code class="descclassname">mqtt_constant.</code><code class="descname">DRAINING_FREQ</code><em class="property"> = 5</em><a class="headerlink" href="#mqtt_constant.DRAINING_FREQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many requests that the Mqtt will try to resolve per seconds(the unit is Hz) if there is a big queue</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.ENDPT_FILE_PATH">
+<code class="descclassname">mqtt_constant.</code><code class="descname">ENDPT_FILE_PATH</code><em class="property"> = 'certs/accessPointID.txt'</em><a class="headerlink" href="#mqtt_constant.ENDPT_FILE_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>relative file path that has accessPointID, access point ID can be obtained by obtaining the first part of the REST API in the aws IoT core console</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.INITIAL_BACKOFF_TIME">
+<code class="descclassname">mqtt_constant.</code><code class="descname">INITIAL_BACKOFF_TIME</code><em class="property"> = 1</em><a class="headerlink" href="#mqtt_constant.INITIAL_BACKOFF_TIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>How may seconds to stop before retransmitting upon the first conflict in mqtt</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.KEEP_ALIVE_SECONDS">
+<code class="descclassname">mqtt_constant.</code><code class="descname">KEEP_ALIVE_SECONDS</code><em class="property"> = 300</em><a class="headerlink" href="#mqtt_constant.KEEP_ALIVE_SECONDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duration between ping to mqtt server to indicate the intention to continue connection</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.MAX_BACKOFF_TIME">
+<code class="descclassname">mqtt_constant.</code><code class="descname">MAX_BACKOFF_TIME</code><em class="property"> = 5</em><a class="headerlink" href="#mqtt_constant.MAX_BACKOFF_TIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Max seconds to stop before retransmitting upon continuous conflict in mqtt</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.MQTT_PORT">
+<code class="descclassname">mqtt_constant.</code><code class="descname">MQTT_PORT</code><em class="property"> = 8883</em><a class="headerlink" href="#mqtt_constant.MQTT_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Port used by secure MQTT service</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.OFFLINE_PUB_QUEUE">
+<code class="descclassname">mqtt_constant.</code><code class="descname">OFFLINE_PUB_QUEUE</code><em class="property"> = 3</em><a class="headerlink" href="#mqtt_constant.OFFLINE_PUB_QUEUE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Max number of requests to be queue while the lambda handler is offline, 0 for none, -1 for infinite</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.OPERATION_TIMEOUT">
+<code class="descclassname">mqtt_constant.</code><code class="descname">OPERATION_TIMEOUT</code><em class="property"> = 4</em><a class="headerlink" href="#mqtt_constant.OPERATION_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many seconds to wait before concluding that general operation(not special one like connect/disconenct) has timed out</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.PRIVATE_KEY_PATH">
+<code class="descclassname">mqtt_constant.</code><code class="descname">PRIVATE_KEY_PATH</code><em class="property"> = 'certs/private.pem.key'</em><a class="headerlink" href="#mqtt_constant.PRIVATE_KEY_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relative path to private key, downloaded from aws IoT</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.PUB_QOS">
+<code class="descclassname">mqtt_constant.</code><code class="descname">PUB_QOS</code><em class="property"> = 1</em><a class="headerlink" href="#mqtt_constant.PUB_QOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Publish Quality of service, service of 1 guarantees at least 1 delivery arrives at target, 0 means best effort not gurantee</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.STABLE_TIME">
+<code class="descclassname">mqtt_constant.</code><code class="descname">STABLE_TIME</code><em class="property"> = 3</em><a class="headerlink" href="#mqtt_constant.STABLE_TIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>How much time in seconds are considered stable, after this amount of time, the backoff time will be reset back to the initial level</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.SUB_QOS">
+<code class="descclassname">mqtt_constant.</code><code class="descname">SUB_QOS</code><em class="property"> = 1</em><a class="headerlink" href="#mqtt_constant.SUB_QOS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subscribe QoS, similar to PUB_QOS</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="mqtt_constant.UNCERTAINTY_MS">
+<code class="descclassname">mqtt_constant.</code><code class="descname">UNCERTAINTY_MS</code><em class="property"> = 200</em><a class="headerlink" href="#mqtt_constant.UNCERTAINTY_MS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uncertainty of measurement that is reported to Alexa during responses</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Khoi Trinh.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
