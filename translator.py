@@ -1,4 +1,10 @@
-""" Translate between Alexa echo messages and IoT messages"""
+"""
+.. module:: translator
+    :synopsis: define a translator class responsible for translating commands from Alexa to IoT devices command and vice versa 
+
+.. moduleauthor:: Khoi Trinh
+"""
+
 import mqtt_constant
 import utils
 import copy
@@ -10,6 +16,7 @@ iotMessagePrototype = {
     "payload": {
     }
 }
+"""Contain a skeleton dictionary of a message to be sent to the IoT Devices, translator base on this for the final message"""
 
 iotReplyPrototype = {
     "namespace": "Alexa.BrightnessController",

@@ -1,4 +1,12 @@
 """
+.. module:: lambda_mqtt_manager
+    :synopsis: define mqtt manager responsible for all communications with amazon aws server
+
+.. moduleauthor:: Khoi Trinh
+"""
+
+
+"""
 This is the mqtt manager, used for quick pub/sub opepration
 """
 

@@ -1,3 +1,11 @@
+"""
+.. module:: utils
+    :synopsis: include utils functions mainly for parsing the json dicts for aws messages
+
+.. moduleauthor:: Khoi Trinh
+"""
+
+
 import time
 import uuid
 

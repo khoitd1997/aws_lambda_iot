@@ -1,3 +1,10 @@
+"""
+.. module:: lambda_main
+    :synopsis: entry point for lambda handler
+
+"""
+
+
 # Borrow a lot from:
 # https://github.com/alexa/alexa-smarthome/tree/master/sample_lambda/python
 

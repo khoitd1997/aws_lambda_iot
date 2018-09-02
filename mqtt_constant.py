@@ -1,4 +1,12 @@
 """
+.. module:: mqtt_constant
+    :synopsis: used for storing constants, contain settings and configurations for establishing connections with mqtt server
+
+.. moduleauthor:: Khoi Trinh
+"""
+
+
+"""
 Used for storing constants related to MQTT operations
 """
 import json

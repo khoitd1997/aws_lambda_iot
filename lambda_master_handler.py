@@ -1,3 +1,11 @@
+"""
+.. module:: lambda_master_handler
+    :synopsis: define the master handler responsible for gluing different modules together to handle an aws request
+
+.. moduleauthor:: Khoi Trinh
+"""
+
+
 import logging
 import time
 import json

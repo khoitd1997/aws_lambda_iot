@@ -1,4 +1,10 @@
-# define a class representation of an IoT target(like pc controller) of the lambda handler
+"""
+.. module:: project_documentation
+    :synopsis: define a class representation of an IoT target(like pc controller) of the lambda handler
+
+.. moduleauthor:: Khoi Trinh
+"""
+
 from abc import ABCMeta, abstractmethod
 import utils
 import copy
