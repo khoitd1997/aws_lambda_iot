@@ -83,7 +83,11 @@
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 <li><a class="reference internal" href="#readme">README</a></li>
 <li><a class="reference internal" href="#aws-lambda-iot-backend">AWS Lambda IoT backend</a><ul>
+<li><a class="reference internal" href="#the-iot-devices-code">The IoT devices code</a></li>
+<li><a class="reference internal" href="#sphinx-docs">Sphinx docs</a></li>
+<li><a class="reference internal" href="#how-to-deploy-to-aws-lambda">How to deploy to aws lambda</a></li>
 <li><a class="reference internal" href="#how-the-system-works">How the system works</a></li>
+<li><a class="reference internal" href="#how-to-add-new-iot-devices">How to add new IoT devices</a></li>
 <li><a class="reference internal" href="#project-strucutre">Project strucutre</a><ul>
 <li><a class="reference internal" href="#python-source-files-structure">Python source files structure</a></li>
 </ul>
@@ -176,12 +180,85 @@
 <div class="section" id="aws-lambda-iot-backend">
 <h1>AWS Lambda IoT backend<a class="headerlink" href="#aws-lambda-iot-backend" title="Permalink to this headline">¶</a></h1>
 <p>Code for lambda function as backend for iot devices, written in <strong>python 3</strong></p>
+<div class="section" id="the-iot-devices-code">
+<h2>The IoT devices code<a class="headerlink" href="#the-iot-devices-code" title="Permalink to this headline">¶</a></h2>
+<p>The code for the IoT devices like esp8266 can be found at <a class="reference external" href="https://github.com/khoitd1997/aws_iot_device">aws iot device code</a></p>
+</div>
+<div class="section" id="sphinx-docs">
+<h2>Sphinx docs<a class="headerlink" href="#sphinx-docs" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://cdn.rawgit.com/khoitd1997/aws_lambda_iot/c5035dfa/docs/docs_build/html/index.html">Lambda Handler Docs</a></p>
+</div>
+<div class="section" id="how-to-deploy-to-aws-lambda">
+<h2>How to deploy to aws lambda<a class="headerlink" href="#how-to-deploy-to-aws-lambda" title="Permalink to this headline">¶</a></h2>
+<p>Use the create_deployment script to get a lambda.zip then upload it to your lambda function console, before that makes sure you have created a lambda function with Alexa Smart Home as a trigger</p>
+</div>
 <div class="section" id="how-the-system-works">
 <h2>How the system works<a class="headerlink" href="#how-the-system-works" title="Permalink to this headline">¶</a></h2>
 <p>The job of the lambda handler is to take request from Alexa, extract the necessary information and then pass it onto the correct IoT devices and vice versa, thus, it carries a database of devices that is implemented, their capabilities as well as their endpoint ID</p>
 <p>When the user utters a smart home command, the command is sent to the lambda hander in a python dictionary, the Master Handler class parses that and obtain the payload, the name and the namespace of the command, package it into a json string(using a class called the Translator), then look up the endpoint ID in the message to know which devices to forward the information to, if the device exists, the handler will know which mqtt server to publish to to send the request to the IoT devices. The master handler use a class called MqttManager to manage pub/sub activities</p>
 <p>Once the message has been forwarded, the handler waits until it timeouts(8 seconds) or it receives a reply from the expected topic (ie the topic that the target IoT device publishes to)</p>
 <p>Once it receives the message from the IoT(which will usually contain the name, namespace and result value of the command that was sent to it), the master handler sends the message to the Translator class, which will reformat and attach more information to the base message so that it fits Alexa Smarthome response guideline for the corresponding endpoint/command types, after that the message is validated using Amazon schema and then returned so that Alexa can tell users the result</p>
+</div>
+<div class="section" id="how-to-add-new-iot-devices">
+<h2>How to add new IoT devices<a class="headerlink" href="#how-to-add-new-iot-devices" title="Permalink to this headline">¶</a></h2>
+<p>To add new devices that can be supported by Alexa, you need to initialize a new awsProfile, use that to create an IotObject for that object and then add it to the IOT_OBJ_LIST in the iot_object.py file, for example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># insidie iot_object.py</span>
+
+<span class="c1"># consult aws smart home documentation to see how to generate these things</span>
+<span class="c1"># https://developer.amazon.com/docs/smarthome/understand-the-smart-home-skill-api.html</span>
+<span class="n">deviceAwsProfile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;endpointId&quot;</span><span class="p">:</span> <span class="s2">&quot;endpoint-001&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;manufacturerName&quot;</span><span class="p">:</span> <span class="s2">&quot;your name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;friendlyName&quot;</span><span class="p">:</span> <span class="s2">&quot;my computer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Controller that controls and monitor the desktop PC&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;displayCategories&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;SWITCH&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;cookie&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;AlexaInterface&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;Alexa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;AlexaInterface&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;Alexa.PowerController&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;supported&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;powerState&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;proactivelyReported&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                <span class="s2">&quot;retrievable&quot;</span><span class="p">:</span> <span class="bp">True</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;AlexaInterface&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;Alexa.EndpointHealth&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;supported&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;connectivity&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;proactivelyReported&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                <span class="s2">&quot;retrievable&quot;</span><span class="p">:</span> <span class="bp">True</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># create IoT object representation of the device</span>
+<span class="c1"># note that pub and sub topic refers to topic that the device pub/sub not the lambda handler&#39;s pub/sub</span>
+<span class="n">deviceName</span> <span class="o">=</span> <span class="n">IotObject</span><span class="p">(</span><span class="s2">&quot;mqttPubChannel&quot;</span><span class="p">,</span> <span class="s2">&quot;mqttSubChannel&quot;</span><span class="p">,</span> <span class="n">deviceAwsProfile</span><span class="p">)</span>
+
+<span class="n">IOT_OBJ_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="n">device1</span><span class="p">,</span> <span class="n">device2</span><span class="p">,</span> <span class="n">deviceName</span><span class="p">]</span> <span class="c1"># add the device to the list</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="project-strucutre">
 <h2>Project strucutre<a class="headerlink" href="#project-strucutre" title="Permalink to this headline">¶</a></h2>
