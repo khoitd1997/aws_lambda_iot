@@ -68,6 +68,7 @@ pcControllerAwsProfile = {
         }
     ]
 }
+"""the pc controller aws profile"""
 
 # source: https://developer.amazon.com/fr/docs/device-apis/alexa-temperaturesensor.html
 
@@ -102,6 +103,7 @@ bedRoomLightAwsProfile = {
         }
                         ]
 }
+"""the bed room light controller aws profile"""
 
 thermostatAwsProfile = {
     "endpointId": "endpoint-004",
@@ -151,10 +153,20 @@ thermostatAwsProfile = {
         }
                         ]
 }
+"""the thermostat aws profile"""
 
 
 class IotObject:
+    """Represents an IoT devices that can be discovered by Alexa smart home"""
+
     def __init__(self, pubTopic, subTopic, awsObjectProfile):
+        """
+        create iot objects
+            :param self: 
+            :param pubTopic: MQTT topic that this device publishses to 
+            :param subTopic: MQTT topic that this device subscribes to
+            :param awsObjectProfile: the dictionary containing the aws profile of this object, the profile allocates the endpoints, specifies the capabilities, friendly name(which the user called to invoke)
+        """
         self.subTopic = subTopic
         self.pubTopic = pubTopic
         self.awsObjectProfile = awsObjectProfile
@@ -167,5 +179,6 @@ pcController = IotObject(
 bedRoomLightController = IotObject(
     "/bedRoomLightRes", "/bedRoomLightReq", bedRoomLightAwsProfile)
 
-""" List of all IoT devices that are connected to this lambda function"""
+
 IOT_OBJ_LIST = [pcController, bedRoomLightController]
+""" List of all IoT devices that are supported by this lambda function"""

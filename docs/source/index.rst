@@ -19,10 +19,14 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
 Introduction
 ==================
 This is the Sphinx documentation for the IoT lambda backend modules, for overview and other info, visit the github page of the project
 
+Readme File
+===========
+.. mdinclude:: ../../README.md
 
 iot_object
 ==================

@@ -12,8 +12,8 @@ import uuid
 
 def get_directive_version(request):
     """
-    docstring here
-        :param request:
+    Get the version directive to be either v2 or v3
+        :param request: the request set to the hander
     """
     try:
         return request["directive"]["header"]["payloadVersion"]
@@ -26,62 +26,62 @@ def get_directive_version(request):
 
 def getUtcTimeStamp(seconds=None):
     """
-    docstring here
-        :param seconds=None:
+    Used for returning current time for timestamp purpose in aws reply
+        :param seconds=None: get current utc time
     """
     return time.strftime("%Y-%m-%dT%H:%M:%S.00Z", time.gmtime(seconds))
 
 
 def getUuid():
     """
-    docstring here
+    Get unique ID for message
     """
     return str(uuid.uuid4())
 
 
 def getNameSpace(message):
     """
-    docstring here
-        :param message: 
+    Return namespace of the command received
+        :param message: message sent to the lambda handler
     """
     return message["directive"]["header"]["namespace"]
 
 
 def getCommandName(message):
     """
-    docstring here
-        :param message: 
+    Get the command name in the json message sent to the lambda handler
+        :param message: message sent to the lambda handler
     """
     return message["directive"]["header"]["name"]
 
 
 def getCorrelationToken(message):
     """
-    docstring here
-        :param message: 
+    Get the Correleation token for the of the Alexa message
+        :param message: message sent to the lambda handler
     """
     return message["directive"]["header"]["correlationToken"]
 
 
 def getEndpointID(echoMessage):
     """
-    docstring here
-        :param echoMessage: 
+    Get the uniqe target endpoint ID of Alexa message so that it can be compared with database
+        :param echomessage: message sent to the lambda handler
     """
     return echoMessage["directive"]["endpoint"]["endpointId"]
 
 
 def getPayload(echoMessage):
     """
-    docstring here
-        :param echoMessage: 
+    Get the paylod component of the message sent to lambda
+        :param echomessage: message sent to the lambda handler
     """
     return echoMessage["directive"]["payload"]
 
 
 def getAccessToken(echoMessage):
     """
-    docstring here
-        :param echoMessage: 
+    Get Access Token of Alexa message
+        :param echomessage: message sent to the lambda handler
     """
     return echoMessage["directive"]["endpoint"]["scope"]["token"]
