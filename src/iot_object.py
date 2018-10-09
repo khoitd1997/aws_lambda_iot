@@ -155,6 +155,56 @@ thermostatAwsProfile = {
 }
 """the thermostat aws profile"""
 
+speakerControllerAwsProfile = {
+    "endpointId": "endpoint-005",
+    "manufacturerName": "Kd",
+    "friendlyName": "my speaker",
+    "description": "speaker controller",
+    "displayCategories": [
+        "OTHER"
+    ],
+    "cookie": {},
+    "capabilities": [
+        {
+            "type": "AlexaInterface",
+            "interface": "Alexa",
+            "version": "3"
+        },
+        {
+            "type": "AlexaInterface",
+            "interface": "Alexa.Speaker",
+            "version": "3",
+            "properties": {
+                "supported": [
+                    {
+                        "name": "volume"
+                    },
+                    {
+                        "name": "muted"
+                    }
+                ],
+                "proactivelyReported": True,
+                "retrievable": True
+            }
+        },
+        {
+            "type": "AlexaInterface",
+            "interface": "Alexa.EndpointHealth",
+            "version": "3",
+            "properties": {
+                "supported": [
+                    {
+                        "name": "connectivity"
+                    }
+                ],
+                "proactivelyReported": True,
+                "retrievable": True
+            }
+        }
+    ]
+}
+"""the speaker controller aws profile"""
+
 
 class IotObject:
     """Represents an IoT devices that can be discovered by Alexa smart home"""
@@ -180,5 +230,8 @@ bedRoomLightController = IotObject(
     "/bedRoomLightRes", "/bedRoomLightReq", bedRoomLightAwsProfile)
 
 
-IOT_OBJ_LIST = [pcController, bedRoomLightController]
+speakerController = IotObject(
+    "/speakerRes", "/speakerReq", speakerControllerAwsProfile)
+
+IOT_OBJ_LIST = [pcController, bedRoomLightController, speakerController]
 """ List of all IoT devices that are supported by this lambda function"""

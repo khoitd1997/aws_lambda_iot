@@ -90,7 +90,11 @@ IOT_OBJ_LIST = [device1, device2, deviceName] # add the device to the list
 
 The python source files are in the main dir of the project, the files in the folders are usually dependencies
 
-- certs/: carry public, private keys, access point ID, certificate, certificate of authority, basically sensitive stuffs used for authentication purpose
+- certs/: carry public, private keys, access point ID, certificate, certificate of authority, basically sensitive stuffs used for authentication purpose, the folder contain these files:
+    - accessPointID.txt: the access point ID of your device, in the aws IoT console, there is a Rest API endpoint, it will be in the format of accessPointID-ats.iot.us-east or accessPointID.iot.us-east, copy this ID to this file
+    - certificate.pem.crt: certificate of your device, downloaded from console
+    - private.pem.key: private key of your device only downloadable when first creating the aws iot thing
+    - VeriSign-Class_3-Public-Primary-Certification-Authority-G5.pem: Certificate of Authority that can be downloaded from aws website
 - docs/: contain Sphinx documentation for python modules
 - src/: contain the source files of the handler
 - lambda_main.py: this is the main lambda handler that AWS uses as entry point
