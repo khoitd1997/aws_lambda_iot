@@ -8,7 +8,7 @@ The code for the IoT devices like esp8266 can be found at [aws iot device code](
 
 ## Sphinx docs
 
-[Lambda Handler Docs](https://rawgit.com/khoitd1997/aws_lambda_iot/master/docs/docs_build/html/index.html)
+[Lambda Handler Docs](https://aws-lambda-iot.readthedocs.io/en/latest/?)
 
 ## How to deploy to aws lambda
 
