@@ -158,7 +158,7 @@ thermostatAwsProfile = {
 speakerControllerAwsProfile = {
     "endpointId": "endpoint-005",
     "manufacturerName": "Kd",
-    "friendlyName": "my computer speaker",
+    "friendlyName": "my desktop speaker",
     "description": "speaker controller",
     "displayCategories": [
         "OTHER"
